@@ -1,28 +1,7 @@
-JOSH & AIRA — GITHUB PAGES WEDDING INVITATION
+JOSH & AIRA WEDDING INVITATION - FIXED MUSIC
 
-PUBLISH
-1. Sign in at https://github.com and create a PUBLIC repository, e.g. josh-and-aira-wedding.
-2. Upload index.html to the repository root.
-3. Open Settings > Pages.
-4. Under Build and deployment, choose "Deploy from a branch".
-5. Select branch "main" and folder "/ (root)", then Save.
-6. After publishing, the link will look like:
-   https://YOUR-USERNAME.github.io/josh-and-aira-wedding/
+Upload index.html and wedding-music.mp3 together into the ROOT of your GitHub repository.
+Do not put either file inside a separate folder.
 
-CUSTOMIZE PHOTOS AND MUSIC
-- Open the invitation and tap each gallery frame to preview a photo from your device.
-- Tap "Add background music" and choose an audio file from your device.
-- These are local previews only and will not automatically appear for other guests.
-- To make photos/music permanent for all guests, upload the media files into the repository and update index.html to reference those files.
-
-RSVP
-This is a DEMO RSVP form. It displays an on-screen confirmation only. It does not transmit or store guest responses for the couple. Connect a form service/backend if you later want real submissions.
-
-EVENT
-Josh & Aira
-December 17, 2026 at 11:00 AM
-Alunsina Hotel and Spa
-Teodorica Ave., Banica, Roxas City, Philippines
-
-MUSIC UPDATE
-The supplied song is included at wedding-music.mp3. It starts when a guest taps Open Invitation (browsers generally block sound before a user gesture). The small music control can pause or resume it. Upload the whole package and keep wedding-music.mp3 beside index.html.
+Open the website and click Open Invitation. Music should attempt to start then.
+The small Music control lets guests pause or play it. Some browsers may still require a tap.

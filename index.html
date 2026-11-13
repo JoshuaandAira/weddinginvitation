@@ -32,18 +32,45 @@ footer{text-align:center;padding:30px;background:var(--wine);color:#f9e9e8}.peta
 <section id="venue"><div class="inner reveal"><div class="kicker">Join us here</div><h2 class="title">The Venue</h2><div class="map"><h3 style="font-size:25px;font-weight:normal;color:var(--wine)">Alunsina Hotel and Spa</h3><p>Teodorica Ave., Banica, Roxas City, Philippines</p><a class="btn" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=Alunsina+Hotel+and+Spa+Teodorica+Ave+Banica+Roxas+City">Open Google Maps</a></div></div></section>
 <section class="details" id="rsvp"><div class="inner reveal"><div class="kicker">Kindly respond</div><h2 class="title">Will You Join Us?</h2><p class="lead">Please let us know if you can celebrate with us.</p><form id="rsvpForm"><label class="field" for="guest">Your full name</label><input id="guest" type="text" required placeholder="Enter your name"><label class="field" for="attend">Will you attend?</label><select id="attend" required><option value="">Please select</option><option>Joyfully accepts</option><option>Regretfully declines</option></select><label class="field" for="guests">Number of guests (including you)</label><input id="guests" type="number" min="1" max="10" value="1" required><label class="field" for="message">Message for the couple (optional)</label><textarea id="message" placeholder="Write a short message..."></textarea><div class="center" style="margin-top:20px"><button class="btn" type="submit">Send RSVP</button></div><p id="result" class="note" role="status"></p></form><p class="note"><b>Demo RSVP:</b> This sample form only shows a confirmation on this device. It does not send or save responses for the couple.</p></div></section>
 <footer><p>With love, Josh &amp; Aira</p><p>December 17, 2026 · 11:00 AM</p></footer></main>
-<button class="music" id="music" style="display:none">♫ Add background music</button><audio id="audio" src="wedding-music.mp3" loop preload="auto"></audio>
+<button class="music" id="music" style="display:none" type="button" aria-label="Toggle wedding music">♫ Music: Off</button><audio id="audio" src="./wedding-music.mp3" loop preload="auto"></audio>
 <script>
 const observer=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible')}),{threshold:.12});
 document.querySelectorAll('.reveal').forEach(x=>observer.observe(x));
-document.getElementById('open').onclick=()=>{document.getElementById('cover').style.display='none';document.getElementById('site').style.display='block';document.getElementById('music').style.display='block';window.scrollTo(0,0)};
+document.getElementById('open').onclick=()=>{
+  document.getElementById('cover').style.display='none';
+  document.getElementById('site').style.display='block';
+  music.style.display='block';
+  window.scrollTo(0,0);
+  startWeddingMusic();
+};
 const target=new Date('2026-12-17T11:00:00+08:00').getTime();
 function tick(){let n=target-Date.now();if(n<0)n=0;let v={days:Math.floor(n/86400000),hours:Math.floor(n%86400000/3600000),minutes:Math.floor(n%3600000/60000),seconds:Math.floor(n%60000/1000)};Object.entries(v).forEach(([k,x])=>document.getElementById(k).textContent=String(x).padStart(2,'0'))}tick();setInterval(tick,1000);
 document.querySelectorAll('.photo input').forEach(inp=>inp.addEventListener('change',()=>{let f=inp.files[0];if(!f)return;let img=new Image(),url=URL.createObjectURL(f);img.src=url;inp.parentElement.querySelector('span').style.display='none';inp.parentElement.appendChild(img)}));
 document.getElementById('rsvpForm').addEventListener('submit',e=>{e.preventDefault();let name=document.getElementById('guest').value.trim(),att=document.getElementById('attend').value;document.getElementById('result').textContent=`Thank you, ${name}! Your demo response (“${att}”) has been noted on this screen. Please contact the couple directly to confirm your RSVP.`;e.target.reset()});
 const audio=document.getElementById('audio'),music=document.getElementById('music');let playing=false;
-function startWeddingMusic(){audio.play().then(()=>{playing=true;music.textContent='♫ Music: On'}).catch(()=>{music.textContent='♫ Tap for Music'})}
-document.getElementById('open').addEventListener('click',startWeddingMusic);
-music.onclick=()=>{if(playing){audio.pause();playing=false;music.textContent='♫ Music: Off'}else{startWeddingMusic()}};
+function startWeddingMusic(){
+  audio.play().then(()=>{
+    playing=true;
+    music.textContent='♫ Music: On';
+    music.setAttribute('aria-label','Pause wedding music');
+  }).catch(()=>{
+    playing=false;
+    music.textContent='♫ Play Music';
+    music.setAttribute('aria-label','Play wedding music');
+  });
+}
+audio.addEventListener('pause',()=>{
+  if(audio.ended)return;
+  playing=false;
+  music.textContent='♫ Music: Off';
+  music.setAttribute('aria-label','Play wedding music');
+});
+music.onclick=()=>{
+  if(!audio.paused){
+    audio.pause();
+  }else{
+    startWeddingMusic();
+  }
+};
 setInterval(()=>{let p=document.createElement('span');p.className='petal';p.textContent=Math.random()>.5?'✿':'❀';p.style.left=Math.random()*100+'vw';p.style.fontSize=(12+Math.random()*15)+'px';p.style.animationDuration=(7+Math.random()*7)+'s';document.body.appendChild(p);setTimeout(()=>p.remove(),15000)},950);
 </script></body></html>
