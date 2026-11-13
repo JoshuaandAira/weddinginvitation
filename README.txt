@@ -23,3 +23,6 @@ Josh & Aira
 December 17, 2026 at 11:00 AM
 Alunsina Hotel and Spa
 Teodorica Ave., Banica, Roxas City, Philippines
+
+MUSIC UPDATE
+The supplied song is included at wedding-music.mp3. It starts when a guest taps Open Invitation (browsers generally block sound before a user gesture). The small music control can pause or resume it. Upload the whole package and keep wedding-music.mp3 beside index.html.
