@@ -20,11 +20,12 @@ button{font:inherit;cursor:pointer}
 .topbar strong{font-size:clamp(14px,3.5vw,18px)}
 .controls{display:flex;gap:7px}
 .controls button{border:1px solid #8a1119;background:#fff4f0;color:#760b12;border-radius:22px;padding:9px 13px}
+#musicToggle{border:1px solid #8a1119;background:#fff4f0;color:#760b12;border-radius:22px;padding:9px 13px}
 .stage{width:min(560px,96vw);margin:auto;position:relative;perspective:1400px}
-.page{display:none;transform-origin:left center;animation:turn .55s ease both}
-.page.active{display:block}
+.page{display:none;transform-origin:left center;backface-visibility:hidden}
+.page.active{display:block;animation:pageReveal .75s cubic-bezier(.2,.75,.2,1) both}
 .page img{display:block;width:100%;height:auto;box-shadow:0 14px 38px #5b061b55;border:1px solid #8b1119}
-@keyframes turn{from{opacity:.35;transform:rotateY(-12deg) translateX(10px)}to{opacity:1;transform:rotateY(0) translateX(0)}}
+@keyframes pageReveal{0%{opacity:0;transform:perspective(1400px) rotateY(-16deg) translateX(22px);filter:brightness(.92)}65%{opacity:1}100%{opacity:1;transform:perspective(1400px) rotateY(0) translateX(0);filter:brightness(1)}}
 .progress{max-width:560px;margin:12px auto 0;text-align:center;color:#6e0710;font:13px Arial,sans-serif}
 .dots{display:flex;justify-content:center;gap:7px;margin-top:9px}
 .dots button{width:8px;height:8px;border:0;border-radius:50%;padding:0;background:#d58b8e}
@@ -40,6 +41,7 @@ button{font:inherit;cursor:pointer}
     <button class="open-btn" id="openInvitation">TAP TO OPEN INVITATION ♥</button>
   </div>
 </section>
+<audio id="weddingMusic" src="images/romantic-instrumental.wav" loop preload="auto"></audio>
 
 <main id="book">
   <div class="topbar">
@@ -47,6 +49,7 @@ button{font:inherit;cursor:pointer}
     <div class="controls">
       <button id="prev" aria-label="Previous page">‹ Back</button>
       <button id="next" aria-label="Next page">Next ›</button>
+      <button id="musicToggle" aria-label="Toggle background music">♫ Music On</button>
     </div>
   </div>
   <div class="stage" id="stage">
@@ -64,7 +67,13 @@ const pages=[...document.querySelectorAll('.page')], dots=document.getElementByI
 let current=0;
 pages.forEach((_,i)=>{const b=document.createElement('button');b.setAttribute('aria-label','Go to page '+(i+1));b.addEventListener('click',()=>show(i));dots.appendChild(b)});
 function show(i){current=Math.max(0,Math.min(pages.length-1,i));pages.forEach((p,n)=>p.classList.toggle('active',n===current));[...dots.children].forEach((d,n)=>d.classList.toggle('active',n===current));document.getElementById('pageCount').textContent=`Page ${current+1} of ${pages.length}`;document.getElementById('prev').disabled=current===0;document.getElementById('next').disabled=current===pages.length-1}
-document.getElementById('openInvitation').addEventListener('click',()=>{cover.style.opacity='0';cover.style.transform='scale(.96)';setTimeout(()=>{cover.style.display='none';book.style.display='block';show(0);window.scrollTo(0,0)},450)});
+const music=document.getElementById('weddingMusic');
+const musicToggle=document.getElementById('musicToggle');
+let musicPlaying=false;
+async function startMusic(){try{await music.play();musicPlaying=true;musicToggle.textContent='♫ Music On';}catch(e){musicPlaying=false;musicToggle.textContent='♫ Play Music';}}
+function pauseMusic(){music.pause();musicPlaying=false;musicToggle.textContent='♫ Music Off';}
+document.getElementById('openInvitation').addEventListener('click',()=>{startMusic();cover.style.opacity='0';cover.style.transform='scale(.96)';setTimeout(()=>{cover.style.display='none';book.style.display='block';show(0);window.scrollTo(0,0)},450)});
+musicToggle.addEventListener('click',()=>{if(musicPlaying)pauseMusic();else startMusic()});
 document.getElementById('prev').addEventListener('click',()=>show(current-1));
 document.getElementById('next').addEventListener('click',()=>show(current+1));
 document.addEventListener('keydown',e=>{if(book.style.display==='block'){if(e.key==='ArrowRight')show(current+1);if(e.key==='ArrowLeft')show(current-1)}});
