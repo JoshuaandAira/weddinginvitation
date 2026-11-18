@@ -18,7 +18,7 @@ button{font:inherit;cursor:pointer}
 #book{display:none;min-height:100vh;padding:18px 12px 28px}
 .topbar{max-width:620px;margin:0 auto 12px;display:flex;align-items:center;justify-content:space-between;gap:8px;color:#6e0710}
 .topbar strong{font-size:clamp(14px,3.5vw,18px)}
-.controls{display:none}
+.controls{display:none!important}
 #musicToggle{border:1px solid #8a1119;background:#fff4f0;color:#760b12;border-radius:22px;padding:9px 13px}
 .page-arrow{
   position:absolute;top:50%;transform:translateY(-50%);z-index:20;
@@ -54,6 +54,11 @@ button{font:inherit;cursor:pointer}
 }
 .floating-music:focus-visible{outline:3px solid #f4d78d;outline-offset:3px}
 @media(max-width:480px){.floating-music{right:12px;bottom:12px;padding:11px 15px}}
+
+.page-arrow{position:absolute;top:50%;transform:translateY(-50%);z-index:30;width:48px;height:48px;border:1px solid #f6d78e;border-radius:50%;display:flex;align-items:center;justify-content:center;background:rgba(91,5,17,.82);color:#fff8e9;font:bold 32px/1 Arial,sans-serif;cursor:pointer;padding:0;box-shadow:0 3px 12px rgba(0,0,0,.28)}
+.page-arrow.left{left:10px}.page-arrow.right{right:10px}
+.page-arrow:disabled{opacity:0;pointer-events:none}
+@media(max-width:480px){.page-arrow{width:42px;height:42px;font-size:28px}.page-arrow.left{left:7px}.page-arrow.right{right:7px}}
 </style>
 </head>
 <body>
@@ -71,10 +76,6 @@ button{font:inherit;cursor:pointer}
 <main id="book">
   <div class="topbar">
     <strong>Josh &amp; Aira</strong>
-    <div class="controls">
-      <button id="prev" aria-label="Previous page">‹ Back</button>
-      <button id="next" aria-label="Next page">Next ›</button>
-    </div>
   </div>
   <div class="stage" id="stage">
     <button class="page-arrow left" id="prev" type="button" aria-label="Previous invitation page">‹</button>
