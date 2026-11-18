@@ -18,9 +18,20 @@ button{font:inherit;cursor:pointer}
 #book{display:none;min-height:100vh;padding:18px 12px 28px}
 .topbar{max-width:620px;margin:0 auto 12px;display:flex;align-items:center;justify-content:space-between;gap:8px;color:#6e0710}
 .topbar strong{font-size:clamp(14px,3.5vw,18px)}
-.controls{display:flex;gap:7px}
-.controls button{border:1px solid #8a1119;background:#fff4f0;color:#760b12;border-radius:22px;padding:9px 13px}
+.controls{display:none}
 #musicToggle{border:1px solid #8a1119;background:#fff4f0;color:#760b12;border-radius:22px;padding:9px 13px}
+.page-arrow{
+  position:absolute;top:50%;transform:translateY(-50%);z-index:20;
+  width:46px;height:46px;border:1px solid #f6d78e;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  background:rgba(91,5,17,.78);color:#fff8e9;font: bold 32px/1 Arial,sans-serif;
+  box-shadow:0 3px 12px rgba(0,0,0,.28);cursor:pointer;padding:0;
+}
+.page-arrow.left{left:10px}
+.page-arrow.right{right:10px}
+.page-arrow:disabled{opacity:0;pointer-events:none}
+.page-arrow:focus-visible{outline:3px solid #f6d78e;outline-offset:3px}
+@media(max-width:480px){.page-arrow{width:40px;height:40px;font-size:27px}.page-arrow.left{left:7px}.page-arrow.right{right:7px}}
 .stage{width:min(560px,96vw);margin:auto;position:relative;perspective:1400px}
 .page{display:none;transform-origin:left center;backface-visibility:hidden}
 .page.active{display:block;animation:pageReveal .75s cubic-bezier(.2,.75,.2,1) both}
@@ -66,6 +77,8 @@ button{font:inherit;cursor:pointer}
     </div>
   </div>
   <div class="stage" id="stage">
+    <button class="page-arrow left" id="prev" type="button" aria-label="Previous invitation page">‹</button>
+    <button class="page-arrow right" id="next" type="button" aria-label="Next invitation page">›</button>
     <article class="page active"><img src="images/invitation.png" alt="Wedding invitation details for December 17, 2026 at 11 AM"></article>
     <article class="page"><img src="images/entourage.png" alt="The wedding entourage and principal sponsors"></article>
     <article class="page"><img src="images/secondary-bearers.png" alt="Secondary sponsors, bearers, and flower girls and boys"></article>
