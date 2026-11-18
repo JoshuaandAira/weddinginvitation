@@ -41,7 +41,10 @@ button{font:inherit;cursor:pointer}
     <button class="open-btn" id="openInvitation">TAP TO OPEN INVITATION ♥</button>
   </div>
 </section>
-<audio id="weddingMusic" src="images/romantic-instrumental.wav" loop preload="auto"></audio>
+<audio id="weddingMusic" loop preload="auto" playsinline>
+  <source src="images/romantic-instrumental.mp3" type="audio/mpeg">
+  <source src="images/romantic-instrumental.wav" type="audio/wav">
+</audio>
 
 <main id="book">
   <div class="topbar">
@@ -70,10 +73,38 @@ function show(i){current=Math.max(0,Math.min(pages.length-1,i));pages.forEach((p
 const music=document.getElementById('weddingMusic');
 const musicToggle=document.getElementById('musicToggle');
 let musicPlaying=false;
-async function startMusic(){try{await music.play();musicPlaying=true;musicToggle.textContent='♫ Music On';}catch(e){musicPlaying=false;musicToggle.textContent='♫ Play Music';}}
-function pauseMusic(){music.pause();musicPlaying=false;musicToggle.textContent='♫ Music Off';}
-document.getElementById('openInvitation').addEventListener('click',()=>{startMusic();cover.style.opacity='0';cover.style.transform='scale(.96)';setTimeout(()=>{cover.style.display='none';book.style.display='block';show(0);window.scrollTo(0,0)},450)});
-musicToggle.addEventListener('click',()=>{if(musicPlaying)pauseMusic();else startMusic()});
+function updateMusicButton(label){
+  musicToggle.textContent=label;
+  musicToggle.setAttribute('aria-label',label.replace('♫ ',''));
+}
+async function startMusic(){
+  try{
+    music.volume=0.85;
+    await music.play();
+    musicPlaying=true;
+    updateMusicButton('♫ Music On');
+  }catch(error){
+    musicPlaying=false;
+    updateMusicButton('♫ Tap to Play');
+    console.warn('Music could not start. Tap the Music button to try again.',error);
+  }
+}
+function pauseMusic(){
+  music.pause();
+  musicPlaying=false;
+  updateMusicButton('♫ Music Off');
+}
+music.addEventListener('play',()=>{musicPlaying=true;updateMusicButton('♫ Music On')});
+music.addEventListener('pause',()=>{musicPlaying=false;if(!music.ended)updateMusicButton('♫ Music Off')});
+music.addEventListener('error',()=>{musicPlaying=false;updateMusicButton('♫ Audio Error')});
+document.getElementById('openInvitation').addEventListener('click',()=>{
+  // Start playback directly inside the visitor's tap/click gesture.
+  startMusic();
+  cover.style.opacity='0';
+  cover.style.transform='scale(.96)';
+  setTimeout(()=>{cover.style.display='none';book.style.display='block';show(0);window.scrollTo(0,0)},450);
+});
+musicToggle.addEventListener('click',()=>{if(!music.paused)pauseMusic();else startMusic()});
 document.getElementById('prev').addEventListener('click',()=>show(current-1));
 document.getElementById('next').addEventListener('click',()=>show(current+1));
 document.addEventListener('keydown',e=>{if(book.style.display==='block'){if(e.key==='ArrowRight')show(current+1);if(e.key==='ArrowLeft')show(current-1)}});
