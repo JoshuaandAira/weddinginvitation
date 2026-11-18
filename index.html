@@ -32,6 +32,17 @@ button{font:inherit;cursor:pointer}
 .dots button.active{background:#790b12;transform:scale(1.35)}
 @media(min-width:700px){#book{padding-top:24px}.stage{width:min(560px,70vw)}}
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+
+/* Persistent music control: visible on the cover and throughout the invitation */
+.floating-music{
+  position:fixed;right:16px;bottom:18px;z-index:9999;
+  border:2px solid #f4d78d;background:#760b12;color:#fff8e9;
+  border-radius:999px;padding:12px 18px;font-weight:700;font-size:15px;
+  box-shadow:0 4px 16px rgba(0,0,0,.28);cursor:pointer;
+  min-height:46px;display:inline-flex;align-items:center;justify-content:center;
+}
+.floating-music:focus-visible{outline:3px solid #f4d78d;outline-offset:3px}
+@media(max-width:480px){.floating-music{right:12px;bottom:12px;padding:11px 15px}}
 </style>
 </head>
 <body>
@@ -42,9 +53,9 @@ button{font:inherit;cursor:pointer}
   </div>
 </section>
 <audio id="weddingMusic" loop preload="auto" playsinline>
-  <source src="images/romantic-instrumental.mp3" type="audio/mpeg">
-  <source src="images/romantic-instrumental.wav" type="audio/wav">
+  <source src="images/wedding-song.mp3" type="audio/mpeg">
 </audio>
+<button id="musicToggle" class="floating-music" type="button" aria-label="Play background music">♫ Play Music</button>
 
 <main id="book">
   <div class="topbar">
@@ -52,7 +63,6 @@ button{font:inherit;cursor:pointer}
     <div class="controls">
       <button id="prev" aria-label="Previous page">‹ Back</button>
       <button id="next" aria-label="Next page">Next ›</button>
-      <button id="musicToggle" aria-label="Toggle background music">♫ Music On</button>
     </div>
   </div>
   <div class="stage" id="stage">
@@ -85,18 +95,18 @@ async function startMusic(){
     updateMusicButton('♫ Music On');
   }catch(error){
     musicPlaying=false;
-    updateMusicButton('♫ Tap to Play');
+    updateMusicButton('♫ Play Music');
     console.warn('Music could not start. Tap the Music button to try again.',error);
   }
 }
 function pauseMusic(){
   music.pause();
   musicPlaying=false;
-  updateMusicButton('♫ Music Off');
+  updateMusicButton('♫ Play Music');
 }
 music.addEventListener('play',()=>{musicPlaying=true;updateMusicButton('♫ Music On')});
-music.addEventListener('pause',()=>{musicPlaying=false;if(!music.ended)updateMusicButton('♫ Music Off')});
-music.addEventListener('error',()=>{musicPlaying=false;updateMusicButton('♫ Audio Error')});
+music.addEventListener('pause',()=>{musicPlaying=false;if(!music.ended)updateMusicButton('♫ Play Music')});
+music.addEventListener('error',()=>{musicPlaying=false;updateMusicButton('♫ Try Music Again')});
 document.getElementById('openInvitation').addEventListener('click',()=>{
   // Start playback directly inside the visitor's tap/click gesture.
   startMusic();
